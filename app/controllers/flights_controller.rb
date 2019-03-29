@@ -5,35 +5,30 @@ class FlightsController < ApplicationController
 
   def create
 
-    # byebug
+    byebug
 
     payloadString = {
       "journeys": [
           {
-              "departureAirport": "LGW",
-              "arrivalAirport": "BCN",
-              "departureDate": "2019-04-08",
+              "departureAirport": search_params["departureAirport"],
+              "arrivalAirport": search_params["arrivalAirport"],
+              "departureDate": search_params["departureDate"],
               "ticketTypes": [
                   "economy"
               ]
           },
           {
-              "departureAirport": "BCN",
-              "arrivalAirport": "LGW",
-              "departureDate": "2019-04-11",
+              "departureAirport": search_params["arrivalAirport"],
+              "arrivalAirport": search_params["departureAirport"],
+              "departureDate": search_params["returnDate"],
               "ticketTypes": [
                   "economy"
               ]
           }
       ],
-      "passengers": [
-          {
-              "type": "adult"
-          }
-      ]
-    }.to_json
+      "passengers": search_params["numOfPass"]
 
-    # byebug
+    }.to_json
 
     response = RestClient::Request.new({
       method: :post,
@@ -54,6 +49,13 @@ class FlightsController < ApplicationController
       # byebug
       render json: response
 
+  end
+
+  private
+
+  def search_params
+    # Doesn't work when .require is added first
+    params.require(:flight).permit(:departureDate, :departureAirport, :arrivalAirport, :returnDate, :numOfPass => [:type])
   end
 
 end
