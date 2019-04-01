@@ -5,7 +5,7 @@ class FlightsController < ApplicationController
 
   def create
 
-    byebug
+    
 
     payloadString = {
       "journeys": [
@@ -46,7 +46,7 @@ class FlightsController < ApplicationController
         end
       end
 
-      # byebug
+      
       render json: response
 
   end
